@@ -1,0 +1,108 @@
+using System.Media;
+namespace WinFormsApp1
+   
+{
+    public partial class pipeBottom : Form
+    {
+        int pipeSpeed = 8;
+        int gravity = 15;
+        int score = 0;
+        bool gameStarted = false;
+
+        public pipeBottom()
+        {
+            InitializeComponent();
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void pipeBottom_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+        }
+
+        private void KeyIsDown(object sender, KeyEventArgs e)
+        {
+            if (gameStarted && e.KeyCode == Keys.Space)
+            {
+                gravity = -15;
+            }
+        }
+
+        private void KeyIsUp(object sender, KeyEventArgs e)
+        {
+            if (gameStarted && e.KeyCode == Keys.Space)
+            {
+                gravity = 15;
+            }
+        }
+
+        private void endGame()
+        {
+            gameTimer.Stop();
+            scoretxt.Text = "Game over!!! Your Score: " + score;
+            gameStarted = false;
+            startButton.Show();
+        }
+
+        private void timer1_Tick_1(object sender, EventArgs e)
+        {
+            if (!gameStarted) return;
+
+            flappyBird.Top += gravity;
+            pipeDown.Left -= pipeSpeed;
+            pipeTop.Left -= pipeSpeed;
+            scoreText.Text = "Score: " + score;
+
+            if (pipeDown.Left < -150)
+            {
+                pipeDown.Left = 400;
+                score++;
+            }
+
+            if (pipeTop.Left < -180)
+            {
+                pipeTop.Left = 550;
+                score++;
+            }
+
+            if (flappyBird.Bounds.IntersectsWith(pipeDown.Bounds) ||
+                flappyBird.Bounds.IntersectsWith(pipeTop.Bounds) ||
+                flappyBird.Bounds.IntersectsWith(ground.Bounds) || flappyBird.Top < -25)
+            {
+                endGame();
+            }
+
+            if (score > 5)
+            {
+                pipeSpeed = 15;
+            }
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            gameStarted = true;
+            gameTimer.Start();
+            score = 0;
+            pipeSpeed = 8;
+            gravity = 15;
+            flappyBird.Top = 100;
+            pipeDown.Left = 400;
+            pipeTop.Left = 550;
+            scoretxt.Text = "";
+            startButton.Hide();
+            this.ActiveControl = null;
+        }
+
+        private void flappyBird_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+ 
